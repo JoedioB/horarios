@@ -1,0 +1,15 @@
+extends layout
+
+block content
+  h1= title
+  
+  form(action=(disciplina.id ? `/disciplinas/editar/${disciplina.id}` : '/disciplinas/novo'), method="POST")
+    .mb-3
+      label.form-label(for="nome") Nome da Disciplina
+      input.form-control#nome(type="text", name="nome", value=disciplina.nome || '', required)
+    .mb-3
+      label.form-label(for="carga_horaria_semanal") Carga Horária (aulas/semana)
+      input.form-control#carga_horaria_semanal(type="number", name="carga_horaria_semanal", value=disciplina.carga_horaria_semanal || '', required, min="1")
+    
+    button.btn.btn-primary(type="submit") Salvar
+    a.btn.btn-secondary.ms-2(href="/disciplinas") Cancelar

@@ -1,0 +1,28 @@
+extends layout
+
+block content
+  .d-flex.justify-content-between.align-items-center.mb-4
+    h1= title
+    a.btn.btn-success(href="/professores/novo") + Novo Professor
+
+  table.table.table-striped.table-hover
+    thead
+      tr
+        th ID
+        th Nome
+        th Ações
+    tbody
+      if professores && professores.length
+        each prof in professores
+          tr
+            td= prof.id
+            td= prof.nome
+            td
+              a.btn.btn-sm.btn-info.me-2(href=`/professores/${prof.id}/disciplinas`) Disciplinas
+              a.btn.btn-sm.btn-warning.me-2(href=`/professores/${prof.id}/disponibilidade`) Disponibilidade
+              a.btn.btn-sm.btn-primary.me-2(href=`/professores/editar/${prof.id}`) Editar
+              form(action=`/professores/deletar/${prof.id}`, method="POST", style="display:inline;" onsubmit="return confirm('Tem certeza?');")
+                button.btn.btn-sm.btn-danger(type="submit") Deletar
+      else
+        tr
+          td(colspan="3").text-center Nenhum professor cadastrado.

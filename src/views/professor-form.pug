@@ -1,0 +1,13 @@
+extends layout
+
+block content
+  h1= title
+  
+  //- Se professor.id existe, a ação é de edição, senão, de criação
+  form(action=(professor.id ? `/professores/editar/${professor.id}` : '/professores/novo'), method="POST")
+    .mb-3
+      label.form-label(for="nome") Nome do Professor
+      input.form-control#nome(type="text", name="nome", value=professor.nome || '', required)
+    
+    button.btn.btn-primary(type="submit") Salvar
+    a.btn.btn-secondary.ms-2(href="/professores") Cancelar

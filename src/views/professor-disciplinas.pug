@@ -1,0 +1,21 @@
+extends layout
+
+block content
+  h1= title
+  p Marque as disciplinas que este professor pode lecionar.
+
+  form(action=`/professores/${professor.id}/disciplinas`, method="POST")
+    .mb-3
+      each disciplina in todasDisciplinas
+        .form-check
+          input.form-check-input(
+            type="checkbox", 
+            name="disciplinas", 
+            value=disciplina.id, 
+            id=`disciplina-${disciplina.id}`,
+            checked=idsDisciplinasDoProfessor.includes(disciplina.id)
+          )
+          label.form-check-label(for=`disciplina-${disciplina.id}`)= disciplina.nome
+    
+    button.btn.btn-primary(type="submit") Salvar Associações
+    a.btn.btn-secondary.ms-2(href="/professores") Voltar
