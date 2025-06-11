@@ -43,7 +43,14 @@ db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
 // Associações
-const { Professor, Disciplina, Turma, DisponibilidadeProfessor, Horario } = db;
+const { Professor, Disciplina, Turma, DisponibilidadeProfessor, Horario, GrupoGeminado } = db; // Adicione GrupoGeminado
+
+// Novas Associações para Grupos Geminados
+GrupoGeminado.belongsTo(Disciplina, { foreignKey: 'disciplinaId' });
+GrupoGeminado.belongsTo(Professor, { foreignKey: 'professorId' });
+GrupoGeminado.belongsToMany(Turma, { through: 'GrupoGeminadoTurmas', as: 'turmas' });
+
+Turma.belongsToMany(GrupoGeminado, { through: 'GrupoGeminadoTurmas' });
 
 // Professor <-> Disciplina (N-M) - CORREÇÃO APLICADA AQUI
 Professor.belongsToMany(Disciplina, { through: 'ProfessorDisciplinas', as: 'disciplinas' });

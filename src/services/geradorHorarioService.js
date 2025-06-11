@@ -1,162 +1,209 @@
 // src/services/geradorHorarioService.js
 
-const { Professor, Disciplina, Turma, Horario, DisponibilidadeProfessor } = require('../models');
+const { Professor, Disciplina, Turma, Horario, DisponibilidadeProfessor, GrupoGeminado } = require('../models');
 const moment = require('moment');
 
-// ... (as constantes SLOTS e SLOTS_PARES permanecem as mesmas)
 const SLOTS = [
-    { inicio: '08:00:00', fim: '08:45:00' }, { inicio: '08:45:00', fim: '09:30:00' },
-    { inicio: '09:45:00', fim: '10:30:00' }, { inicio: '10:30:00', fim: '11:15:00' },
-    { inicio: '11:15:00', fim: '12:00:00' },
-    { inicio: '13:00:00', fim: '13:45:00' }, { inicio: '13:45:00', fim: '14:30:00' },
-    { inicio: '14:30:00', fim: '15:15:00' },
-    { inicio: '15:30:00', fim: '16:15:00' }, { inicio: '16:15:00', fim: '17:00:00' },
-];
-
-const SLOTS_PARES = [
-    { slot1: SLOTS[0], slot2: SLOTS[1] },
-    { slot1: SLOTS[2], slot2: SLOTS[3] },
-    { slot1: SLOTS[5], slot2: SLOTS[6] },
-    { slot1: SLOTS[8], slot2: SLOTS[9] },
+    { inicio: '08:00:00', fim: '08:45:00', periodo: 'manha' }, { inicio: '08:45:00', fim: '09:30:00', periodo: 'manha' },
+    { inicio: '09:45:00', fim: '10:30:00', periodo: 'manha' }, { inicio: '10:30:00', fim: '11:15:00', periodo: 'manha' },
+    { inicio: '11:15:00', fim: '12:00:00', periodo: 'manha' },
+    { inicio: '13:00:00', fim: '13:45:00', periodo: 'tarde' }, { inicio: '13:45:00', fim: '14:30:00', periodo: 'tarde' },
+    { inicio: '14:30:00', fim: '15:15:00', periodo: 'tarde' },
+    { inicio: '15:30:00', fim: '16:15:00', periodo: 'tarde' }, { inicio: '16:15:00', fim: '17:00:00', periodo: 'tarde' },
 ];
 
 class GeradorHorarioService {
-    // ... (a função gerar() e alocarAula() permanecem as mesmas)
     async gerar() {
-        // 1. PREPARAÇÃO
         await Horario.destroy({ truncate: true, cascade: false });
-        const turmas = await Turma.findAll({ include: [{ model: Disciplina, as: 'Disciplinas' }] });
-        const professores = await Professor.findAll({
-            include: [
-                { model: Disciplina, as: 'disciplinas' },
-                { model: DisponibilidadeProfessor, as: 'disponibilidades' }
-            ]
-        });
-        const horarioTurmas = {}, horarioProfessores = {};
-        const demandas = {}, listaDeTarefas = [];
 
-        for (const turma of turmas) {
-            for (const disciplina of turma.Disciplinas) {
-                const key = `${turma.id}-${disciplina.id}`;
-                demandas[key] = disciplina.carga_horaria_semanal;
-                if (disciplina.carga_horaria_semanal > 0) {
-                    listaDeTarefas.push({ turma, disciplina });
+        const [professores, turmas, gruposGeminados] = await Promise.all([
+            Professor.findAll({ include: [{ model: Disciplina, as: 'disciplinas' }, { model: DisponibilidadeProfessor, as: 'disponibilidades' }] }),
+            Turma.findAll({ include: [{ model: Disciplina, as: 'Disciplinas' }] }),
+            GrupoGeminado.findAll({ include: [{ model: Turma, as: 'turmas' }, Disciplina, { model: Professor, include: [{ model: DisponibilidadeProfessor, as: 'disponibilidades' }] }] })
+        ]);
+        
+        const horarioTurmas = {};
+        const horarioProfessores = {};
+        const demandas = this._prepararDemandas(turmas, gruposGeminados);
+        const turmasEmGrupos = this._getTurmasEmGrupos(gruposGeminados);
+        
+        for (const turma of turmas.sort((a,b) => a.nome.localeCompare(b.nome))) {
+            for (let dia = 1; dia <= 5; dia++) {
+                for (let i = 0; i < SLOTS.length; i++) {
+                    const slot1 = SLOTS[i];
+                    if (horarioTurmas[`${turma.id}-${dia}-${slot1.inicio}`]) continue;
+
+                    let alocou = false;
+                    if (i + 1 < SLOTS.length && slot1.fim === SLOTS[i + 1].inicio) {
+                        const slot2 = SLOTS[i + 1];
+                        alocou = this._tentarAlocarNoSlot(turma, dia, [slot1, slot2], 2, demandas, horarioTurmas, horarioProfessores, gruposGeminados, turmasEmGrupos, professores);
+                    }
+                    if (alocou) {
+                        i++;
+                        continue;
+                    }
+                    this._tentarAlocarNoSlot(turma, dia, [slot1], 1, demandas, horarioTurmas, horarioProfessores, gruposGeminados, turmasEmGrupos, professores);
                 }
             }
         }
         
-        listaDeTarefas.sort(() => Math.random() - 0.5);
-
-        // 2. ALGORITMO DE ALOCAÇÃO
-        for (const tarefa of listaDeTarefas) {
-            const { turma, disciplina } = tarefa;
-            const key = `${turma.id}-${disciplina.id}`;
-            const profsQualificados = professores.filter(p => p.disciplinas.some(d => d.id === disciplina.id));
-
-            while (demandas[key] > 0) {
-                let alocouNestaPassagemDoWhile = false;
-                for (const professor of profsQualificados) {
-                    let professorConseguiuAlocar = false;
-                    if (demandas[key] >= 2) {
-                        if (await this.alocarAula(turma, disciplina, professor, 2, horarioTurmas, horarioProfessores)) {
-                            demandas[key] -= 2;
-                            professorConseguiuAlocar = true;
-                        }
-                    }
-                    if (!professorConseguiuAlocar && demandas[key] >= 1) {
-                         if (await this.alocarAula(turma, disciplina, professor, 1, horarioTurmas, horarioProfessores)) {
-                            demandas[key] -= 1;
-                            professorConseguiuAlocar = true;
-                        }
-                    }
-                    if (professorConseguiuAlocar) {
-                        alocouNestaPassagemDoWhile = true;
-                        break;
-                    }
-                }
-                if (!alocouNestaPassagemDoWhile) {
-                    break;
-                }
-            }
-        }
-        
-        // 3. VERIFICAÇÃO FINAL
-        const aulasNaoAlocadas = [];
-        for (const key in demandas) {
-            if (demandas[key] > 0) {
-                const [turmaId, disciplinaId] = key.split('-');
-                const turma = await Turma.findByPk(turmaId);
-                const disciplina = await Disciplina.findByPk(disciplinaId);
-                aulasNaoAlocadas.push(`Turma: ${turma.nome}, Disciplina: ${disciplina.nome} (faltaram ${demandas[key]} aulas)`);
-            }
-        }
+        const aulasNaoAlocadas = this._verificarDemandasNaoAtendidas(demandas, turmas, gruposGeminados);
         if (aulasNaoAlocadas.length > 0) {
             return { success: false, message: "Algumas aulas não puderam ser alocadas:", details: aulasNaoAlocadas };
         }
-        return { success: true, message: "Horário gerado com sucesso, priorizando aulas duplas!" };
+        return { success: true, message: "Horário gerado com sucesso!" };
     }
 
-    async alocarAula(turma, disciplina, professor, tipoBloco, horarioTurmas, horarioProfessores) {
-        const slotsParaTentar = tipoBloco === 2 ? SLOTS_PARES : SLOTS.map(s => ({ slot1: s }));
-        slotsParaTentar.sort(() => Math.random() - 0.5); 
-        for (const par of slotsParaTentar) {
-            const dias = [1, 2, 3, 4, 5].sort(() => Math.random() - 0.5);
-            for (let dia of dias) {
-                const { slot1, slot2 } = par;
-                const disponivel1 = this.isSlotDisponivel(turma, professor, dia, slot1, horarioTurmas, horarioProfessores);
-                let disponivel2 = true;
-                if (tipoBloco === 2) {
-                    disponivel2 = this.isSlotDisponivel(turma, professor, dia, slot2, horarioTurmas, horarioProfessores);
-                }
-                if (disponivel1 && disponivel2) {
-                    await this.marcarHorario(turma, disciplina, professor, dia, slot1, horarioTurmas, horarioProfessores);
-                    if (tipoBloco === 2) {
-                        await this.marcarHorario(turma, disciplina, professor, dia, slot2, horarioProfessores, horarioProfessores);
+    // ##########################################################################
+    // ## CORREÇÃO DEFINITIVA: A assinatura da função agora corresponde à chamada ##
+    // ##########################################################################
+    _tentarAlocarNoSlot(turma, dia, slots, tipoBloco, demandas, horarioTurmas, horarioProfessores, gruposGeminados, turmasEmGrupos, todosProfessores) {
+        if ((dia === 3 || dia === 4) && slots[0].periodo === 'tarde') return false;
+
+        const disciplinasDaTurma = turma.Disciplinas.sort(() => Math.random() - 0.5);
+        for (const disciplina of disciplinasDaTurma) {
+            const demandaTipoKey = tipoBloco === 2 ? 'duplas' : 'simples';
+            const isGeminada = turmasEmGrupos.has(`${turma.id}-${disciplina.id}`);
+            
+            if (isGeminada) {
+                const grupoGeminado = gruposGeminados.find(g => g.Disciplina.id === disciplina.id && g.turmas.some(t => t.id === turma.id));
+                if (!grupoGeminado) continue;
+
+                const demandaKey = `grupo-${grupoGeminado.id}`;
+                if (demandas[demandaKey] && demandas[demandaKey][demandaTipoKey] > 0) {
+                    if (this._verificarDisponibilidadeGrupo(grupoGeminado, dia, slots, horarioTurmas, horarioProfessores)) {
+                        this._marcarHorarioGrupo(grupoGeminado, dia, slots, horarioTurmas, horarioProfessores);
+                        demandas[demandaKey][demandaTipoKey]--;
+                        return true;
                     }
-                    console.log(`ALOCADO: ${tipoBloco === 2 ? 'DUPLA' : 'SIMPLES'} - Turma ${turma.nome}, Disc ${disciplina.nome}, Prof ${professor.nome}, Dia ${dia}`);
-                    return true;
+                }
+            } else {
+                const demandaKey = `turma-${turma.id}-disc-${disciplina.id}`;
+                if (demandas[demandaKey] && demandas[demandaKey][demandaTipoKey] > 0) {
+                    const profDisponivel = this._encontrarProfessorDisponivel(disciplina, turma, dia, slots, horarioProfessores, horarioTurmas, todosProfessores);
+                    if (profDisponivel) {
+                        this._marcarHorarioNormal(turma, disciplina, profDisponivel, dia, slots, horarioTurmas, horarioProfessores);
+                        demandas[demandaKey][demandaTipoKey]--;
+                        return true;
+                    }
                 }
             }
         }
         return false;
     }
     
-    /**
-     * Verifica se um slot específico está livre para turma, professor e se o professor tem disponibilidade.
-     * Inclui a nova regra de bloqueio.
-     */
-    isSlotDisponivel(turma, professor, dia, slot, horarioTurmas, horarioProfessores) {
-        // ###############################################################
-        // ## CORREÇÃO APLICADA AQUI: Adiciona a restrição de bloqueio   ##
-        // ###############################################################
-        
-        const isTarde = slot.inicio >= '13:00:00';
-        const isQuartaOuQuinta = (dia === 3 || dia === 4); // 3=Quarta, 4=Quinta
-
-        // Se for quarta ou quinta à tarde, o slot é inválido.
-        if (isQuartaOuQuinta && isTarde) {
-            return false;
+    _encontrarProfessorDisponivel(disciplina, turma, dia, slots, horarioProfessores, horarioTurmas, todosProfessores) {
+        for (const slot of slots) {
+            if (horarioTurmas[`${turma.id}-${dia}-${slot.inicio}`]) return null;
         }
-
-        // Se não for um slot bloqueado, continua com as verificações normais.
-        const conflitoTurma = horarioTurmas[`${turma.id}-${dia}-${slot.inicio}`];
-        const conflitoProfessor = horarioProfessores[`${professor.id}-${dia}-${slot.inicio}`];
-        const professorDisponivel = this.isProfessorDisponivel(professor, dia, slot.inicio);
-
-        return !conflitoTurma && !conflitoProfessor && professorDisponivel;
+        
+        const professoresQualificados = todosProfessores.filter(p => p.disciplinas.some(d => d.id === disciplina.id));
+        
+        for (const professor of professoresQualificados) {
+            let disponivel = true;
+            for (const slot of slots) {
+                if (!this._isProfessorDisponivel(professor, dia, slot.inicio) || horarioProfessores[`${professor.id}-${dia}-${slot.inicio}`]) {
+                    disponivel = false;
+                    break;
+                }
+            }
+            if (disponivel) return professor;
+        }
+        return null;
     }
 
-    async marcarHorario(turma, disciplina, professor, dia, slot, horarioTurmas, horarioProfessores) {
-        await Horario.create({
-            turmaId: turma.id, disciplinaId: disciplina.id, professorId: professor.id,
-            dia_semana: dia, hora_inicio: slot.inicio, hora_fim: slot.fim
+    _verificarDisponibilidadeGrupo(grupo, dia, slots, horarioTurmas, horarioProfessores) {
+        const professor = grupo.Professor;
+        for (const slot of slots) {
+            if (!this._isProfessorDisponivel(professor, dia, slot.inicio) || horarioProfessores[`${professor.id}-${dia}-${slot.inicio}`]) return false;
+        }
+        for (const turmaDoGrupo of grupo.turmas) {
+            for (const slot of slots) {
+                if (horarioTurmas[`${turmaDoGrupo.id}-${dia}-${slot.inicio}`]) return false;
+            }
+        }
+        return true;
+    }
+
+    async _marcarHorarioGrupo(grupo, dia, slots, horarioTurmas, horarioProfessores) {
+        for (const turmaDoGrupo of grupo.turmas) {
+            for (const slot of slots) {
+                await this._marcarSlot(turmaDoGrupo.id, grupo.Disciplina.id, grupo.Professor.id, dia, slot, horarioTurmas, horarioProfessores);
+            }
+        }
+    }
+
+    async _marcarHorarioNormal(turma, disciplina, professor, dia, slots, horarioTurmas, horarioProfessores) {
+        for (const slot of slots) {
+            await this._marcarSlot(turma.id, disciplina.id, professor.id, dia, slot, horarioTurmas, horarioProfessores);
+        }
+    }
+
+    _prepararDemandas(turmas, gruposGeminados) {
+        const demandas = {};
+        const turmasEmGrupos = this._getTurmasEmGrupos(gruposGeminados);
+
+        gruposGeminados.forEach(grupo => {
+            const carga = grupo.Disciplina.carga_horaria_semanal;
+            if (carga > 0) {
+                 demandas[`grupo-${grupo.id}`] = { duplas: Math.floor(carga / 2), simples: carga % 2 };
+            }
         });
-        horarioTurmas[`${turma.id}-${dia}-${slot.inicio}`] = true;
-        horarioProfessores[`${professor.id}-${dia}-${slot.inicio}`] = true;
+
+        turmas.forEach(turma => {
+            turma.Disciplinas.forEach(disciplina => {
+                if (!turmasEmGrupos.has(`${turma.id}-${disciplina.id}`)) {
+                    const carga = disciplina.carga_horaria_semanal;
+                    if (carga > 0) {
+                        demandas[`turma-${turma.id}-disc-${disciplina.id}`] = { duplas: Math.floor(carga / 2), simples: carga % 2 };
+                    }
+                }
+            });
+        });
+        return demandas;
     }
 
-    isProfessorDisponivel(professor, dia, horaInicioSlot) {
-        if (!professor.disponibilidades || professor.disponibilidades.length === 0) return false;
+    _getTurmasEmGrupos(gruposGeminados) {
+        const turmasEmGrupos = new Set();
+        gruposGeminados.forEach(g => g.turmas.forEach(t => turmasEmGrupos.add(`${t.id}-${g.Disciplina.id}`)));
+        return turmasEmGrupos;
+    }
+
+    _verificarDemandasNaoAtendidas(demandas, turmas, gruposGeminados) {
+        const naoAtendidas = [];
+        for (const key in demandas) {
+            const demanda = demandas[key];
+            if (demanda.duplas > 0 || demanda.simples > 0) {
+                const faltaram = demanda.duplas * 2 + demanda.simples;
+                let nome = key;
+                if (key.startsWith('grupo-')) {
+                    const grupoId = parseInt(key.replace('grupo-', ''), 10);
+                    const grupo = gruposGeminados.find(g => g.id === grupoId);
+                    if (grupo) nome = `Grupo: ${grupo.nome}`;
+                } else {
+                    const parts = key.split('-');
+                    const turmaId = parseInt(parts[1], 10);
+                    const discId = parseInt(parts[3], 10);
+                    const turma = turmas.find(t => t.id === turmaId);
+                    if (turma) {
+                        const disciplina = turma.Disciplinas.find(d => d.id === discId);
+                        if (disciplina) nome = `Turma: ${turma.nome}, Disciplina: ${disciplina.nome}`;
+                    }
+                }
+                naoAtendidas.push(`${nome} (faltaram ${faltaram} aulas)`);
+            }
+        }
+        return naoAtendidas;
+    }
+    
+    async _marcarSlot(turmaId, disciplinaId, professorId, dia, slot, horarioTurmas, horarioProfessores) {
+        await Horario.create({ turmaId, disciplinaId, professorId, dia_semana: dia, hora_inicio: slot.inicio, hora_fim: slot.fim });
+        horarioTurmas[`${turmaId}-${dia}-${slot.inicio}`] = true;
+        horarioProfessores[`${professorId}-${dia}-${slot.inicio}`] = true;
+    }
+
+    _isProfessorDisponivel(professor, dia, horaInicioSlot) {
+        if (!professor || !professor.disponibilidades) return false;
         const horaSlot = moment(horaInicioSlot, 'HH:mm:ss');
         for (const disp of professor.disponibilidades) {
             if (disp.dia_semana === dia) {

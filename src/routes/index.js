@@ -6,6 +6,11 @@ const professorRoutes = require('./professorRoutes');
 const disciplinaRoutes = require('./disciplinaRoutes');
 const turmaRoutes = require('./turmaRoutes');
 const horarioRoutes = require('./horarioRoutes');
+const grupoGeminadoRoutes = require('./grupoGeminadoRoutes'); // Importar
+const analiseController = require('../controllers/analiseController'); // Importar
+
+
+router.get('/analise', analiseController.showAnalise); // Adicionar a rota
 
 // Página Inicial
 router.get('/', async (req, res) => {
@@ -18,5 +23,6 @@ router.use('/professores', professorRoutes);
 router.use('/disciplinas', disciplinaRoutes);
 router.use('/turmas', turmaRoutes);
 router.use('/horarios', horarioRoutes);
+router.use('/grupos-geminados', grupoGeminadoRoutes); // Registrar
 
 module.exports = router;
