@@ -3,6 +3,19 @@ extends layout
 block content
   h1.mb-4= title
 
+  //- A variável 'turmaId' agora é passada diretamente pelo controller
+  if turmaId
+    .d-flex.justify-content-end.mb-3.no-print
+      .btn-group
+        button.btn.btn-secondary(type="button" onclick="window.print()")
+          | Imprimir
+        a.btn.btn-success(href=`/horarios/turma/${turmaId}/exportar/excel`)
+          | Exportar para Excel
+        a.btn.btn-danger(href=`/horarios/turma/${turmaId}/exportar/pdf`)
+          | Exportar para PDF
+
+  .table-responsive
+    // ... (o resto da tabela permanece igual)
   .table-responsive
     table.table.table-bordered.text-center.align-middle
       thead.table-dark
