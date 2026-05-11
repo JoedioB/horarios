@@ -1,21 +1,31 @@
-import mysql from "mysql2";
-import dotenv from 'dotenv'; // Apenas para desenvolvimento local
-dotenv.config(); // Carrega variáveis do.env para desenvolvimento local
+require('dotenv').config();
 
-const con = mysql.createConnection({
-  host: process.env.MYSQLHOST,
-  port: process.env.MYSQLPORT,
-  user: process.env.MYSQLUSER,
-  password: process.env.MYSQLPASSWORD,
-  database: process.env.MYSQLDATABASE,
-});
-
-con.connect((error) => {
-  if (error) {
-    console.log("❌ Erro de conexão com o banco de dados:", error);
-  } else {
-    console.log("✅ Conectado ao banco de dados MySQL!");
+module.exports = {
+  development: {
+    username: process.env.MYSQLUSER || 'root',
+    password: process.env.MYSQLPASSWORD || null,
+    database: process.env.MYSQLDATABASE || 'horarios_dev',
+    host: process.env.MYSQLHOST || '127.0.0.1',
+    port: process.env.MYSQLPORT || 3306,
+    dialect: 'mysql',
+    logging: false
+  },
+  test: {
+    username: process.env.MYSQLUSER || 'root',
+    password: process.env.MYSQLPASSWORD || null,
+    database: process.env.MYSQLDATABASE || 'horarios_test',
+    host: process.env.MYSQLHOST || '127.0.0.1',
+    port: process.env.MYSQLPORT || 3306,
+    dialect: 'mysql',
+    logging: false
+  },
+  production: {
+    username: process.env.MYSQLUSER || 'root',
+    password: process.env.MYSQLPASSWORD || null,
+    database: process.env.MYSQLDATABASE || 'horarios_prod',
+    host: process.env.MYSQLHOST || '127.0.0.1',
+    port: process.env.MYSQLPORT || 3306,
+    dialect: 'mysql',
+    logging: false
   }
-});
-
-export default con;
+};

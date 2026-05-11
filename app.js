@@ -20,7 +20,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', mainRoutes);
 
 // Sincronizar com o banco de dados e iniciar o servidor
-sequelize.sync({ alter: true }) // 'alter: true' pode modificar tabelas existentes. Use com cuidado em produção.
+const syncOptions = process.env.NODE_ENV === 'production' ? {} : { alter: true };
+sequelize.sync(syncOptions)
   .then(() => {
     console.log('Banco de dados conectado e sincronizado.');
     app.listen(PORT, () => {

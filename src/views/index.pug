@@ -6,8 +6,8 @@ block content
       h1.display-5.fw-bold Bem-vindo ao Gerador de Horários!
       p.col-md-8.fs-4
         | Cadastre professores, disciplinas e turmas. Depois, clique no botão abaixo para gerar o quadro de horários automaticamente.
-      form(action="/horarios/gerar" method="POST")
-        button.btn.btn-primary.btn-lg(type="submit") Gerar Horário Automático
+      form#form-gerar(action="/horarios/gerar" method="POST")
+        button#btn-gerar.btn.btn-primary.btn-lg(type="submit" onclick="this.innerHTML='Gerando Horário... Por favor aguarde...'; this.disabled=true; document.getElementById('form-gerar').submit();") Gerar Horário Automático
 
   hr
 

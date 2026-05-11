@@ -1,0 +1,170 @@
+;;;;;;;;;
+;Disciplina;CH anual;N° de aulas por semana;Professor;Turma;Curso;Dia de manutenção do docente;Noites de atuação;N° de Noites que o docente leciona
+;História;60;2;Anderson;1A;Informática para Internet;Segunda;Terça a sexta;2
+;Programação I;120;4;Armando;1A;Informática para Internet;Segunda;Terça;0
+;Desenvolvimento Web I;90;3;Cléber;1A;Informática para Internet;Segunda;Nenhuma noite;0
+;Biologia;60;2;Eliane;1A;Informática para Internet;Terça;Segunda;1
+;Química;60;2;Éria;1A;Informática para Internet;Segunda;Nenhuma noite;0
+;Português;90;3;Glíndia;1A;Informática para Internet;Sexta;Nenhuma noite;0
+;Física;60;2;Guilherme;1A;Informática para Internet;professor 20h concentrar as aulas no menor numero de dias possível;Nenhuma noite;0
+;Educação Física;60;2;Hélder;1A;Informática para Internet;Concentrar as aulas nos períodos da manhã e preferencialmente próximo ao meio dia;Quarta;2
+;Geografia;60;2;Leila;1A;Informática para Internet;Segunda;Terça e Quarta;2
+;Tópicos em Ciências Humanas e Tecnologia;60;2;Leila;1A;Informática para Internet;Segunda;Terça e Quarta;2
+;Introdução a Computação;60;2;Liliana;1A;Informática para Internet;Terça;quarta;1
+;Inglês;60;2;Matheus;1A;Informática para Internet;Sexta;quarta, quinta;2
+;Artes;60;2;Tereza;1A;Informática para Internet;Segunda;Terça e Quarta;2
+;Matemática;90;2;Valdirene;1A;Informática para Internet;Terça;Nenhuma noite;0
+;Matemática Aplicada à Informática;30;2;Valdirene;1A;Informática para Internet;Terça;Nenhuma noite;0
+;História;60;2;Anderson;1B;Informática para Internet;Segunda;Terça a sexta;2
+;Desenvolvimento Web I;90;3;Cléber;1B;Informática para Internet;Segunda;Nenhuma noite;0
+;Biologia;60;2;Eliane;1B;Informática para Internet;Terça;Segunda;1
+;Química;60;2;Éria;1B;Informática para Internet;Segunda;Nenhuma noite;0
+;Português;90;3;Glíndia;1B;Informática para Internet;Sexta;Nenhuma noite;0
+;Física;60;2;Guilherme;1B;Informática para Internet;professor 20h concentrar as aulas no menor numero de dias possível;Nenhuma noite;0
+;Educação Física;60;2;Hélder;1B;Informática para Internet;Concentrar as aulas nos períodos da manhã e preferencialmente próximo ao meio dia;Quarta;2
+;Programação I;120;4;Júnior;1B;Informática para Internet;Segunda;Quinta;1
+;Geografia;60;2;Leila;1B;Informática para Internet;Segunda;Terça e Quarta;2
+;Introdução a Computação;60;2;Liliana;1B;Informática para Internet;Terça;quarta;1
+;Tópicos em Ciências Humanas e Tecnologia;60;2;Mara;1B;Informática para Internet;Sexta;Quinta;1
+;Inglês;60;2;Matheus;1B;Informática para Internet;Sexta;quarta, quinta;2
+;Artes;60;2;Tereza;1B;Informática para Internet;Segunda;Terça e Quarta;2
+;Matemática;90;3;Valdirene;1B;Informática para Internet;Terça;Nenhuma noite;0
+;Matemática Aplicada à Informática;30;2;Valdirene;1B;Informática para Internet;Terça;Nenhuma noite;0
+;Relações Interpessoais;60;2;Alex;1H;Hospedagem;Sexta;Segunda, Terça, Quarta;4
+;História;60;2;Anderson;1H;Hospedagem;Segunda;Terça a sexta;2
+;Biologia;60;2;Eliane;1H;Hospedagem;Terça;Segunda;1
+;Lingua Espanhola;60;2;Glíndia;1H;Hospedagem;Sexta;Nenhuma noite;0
+;Lingua Portuguesa;90;3;Glíndia;1H;Hospedagem;Sexta;Nenhuma noite;0
+;Física;60;2;Guilherme;1H;Hospedagem;professor 20h concentrar as aulas no menor numero de dias possível;Nenhuma noite;0
+;Educação Física;60;2;Hélder;1H;Hospedagem;Concentrar as aulas nos períodos da manhã e preferencialmente próximo ao meio dia;Quarta;2
+;Técnicas de Lazer e Entretenimento;60;2;Hélder;1H;Hospedagem;Concentrar as aulas nos períodos da manhã e preferencialmente próximo ao meio dia;Quarta;2
+;Iniciação Científica;60;2;Josieli;1H;Hospedagem;Sexta;Nenhuma noite;0
+;Introdução aos Meios de Hospedagem;60;2;Kênia;1H;Hospedagem;Sexta;Segunda e Terça;3
+;Geografia;60;2;Leila;1H;Hospedagem;Segunda;Terça e Quarta;2
+;Tópicos Especiais em Ciências Humanas I;60;2;Leocádio;1H;Hospedagem;Segunda;quarta;2
+;Filosofia;60;2;Mara;1H;Hospedagem;Sexta;Quinta;1
+;Fundamentos de Hospitalidade e Turismo;60;2;Maria Emília;1H;Hospedagem;Segunda;Quarta, quinta e sexta;3
+;Lingua Inglesa;60;2;Matheus;1H;Hospedagem;Sexta;quarta, quinta;2
+;Química;60;2;Tatiane;1H;Hospedagem;Terça;Quinta;2
+;Matemática;90;3;Valdirene;1H;Hospedagem;Terça;Nenhuma noite;0
+;Biologia;60;2;Eliane;2A;Informática para Internet;Terça;Segunda;1
+;Química;60;2;Éria;2A;Informática para Internet;Segunda;Nenhuma noite;0
+;Física;60;2;Guilherme;2A;Informática para Internet;professor 20h concentrar as aulas no menor numero de dias possível;Nenhuma noite;0
+;Educação Física;60;2;Hélder;2A;Informática para Internet;Concentrar as aulas nos períodos da manhã e preferencialmente próximo ao meio dia;Quarta;2
+;Desenvolvimento Web II;120;4;Joédio;2A;Informática para Internet;Sexta;Nenhuma noite;0
+;Geografia;60;2;Josieli;2A;Informática para Internet;Sexta;Nenhuma noite;0
+;Sociologia;60;2;Leocádio;2A;Informática para Internet;Segunda;quarta;2
+;Projetos de Software;60;2;Liliana;2A;Informática para Internet;Terça;quarta;1
+;Matemática;90;3;Lucas;2A;Informática para Internet;Terça;Seguanda e quarta;1
+;Filosofia;60;2;Mara;2A;Informática para Internet;Sexta;Quinta;1
+;História;60;2;Paola;2A;Informática para Internet;quarta e quinta pela manhã;Segunda, Quinta e sexta;2
+;Banco de Dados;60;2;Sandra;2A;Informática para Internet;Sexta;Nenhuma noite;0
+;Inglês;60;2;Silvana;2A;Informática para Internet;Segunda;Nenhuma noite;0
+;Português;90;3;Silvana;2A;Informática para Internet;Segunda;Nenhuma noite;0
+;Artes;60;2;Tereza;2A;Informática para Internet;Segunda;Terça e Quarta;2
+;Biologia;60;2;Eliane;2B;Informática para Internet;Terça;Segunda;1
+;Química;60;2;Éria;2B;Informática para Internet;Segunda;Nenhuma noite;0
+;Física;60;2;Guilherme;2B;Informática para Internet;professor 20h concentrar as aulas no menor numero de dias possível;Nenhuma noite;0
+;Educação Física;60;2;Hélder;2B;Informática para Internet;Concentrar as aulas nos períodos da manhã e preferencialmente próximo ao meio dia;Quarta;2
+;Desenvolvimento Web II;120;4;Joédio;2B;Informática para Internet;Sexta;Nenhuma noite;0
+;Geografia;60;2;Josieli;2B;Informática para Internet;Sexta;Nenhuma noite;0
+;Sociologia;60;2;Leocádio;2B;Informática para Internet;Segunda;quarta;2
+;Projetos de Software;60;2;Liliana;2B;Informática para Internet;Terça;quarta;1
+;Matemática;90;3;Lucas;2B;Informática para Internet;Terça;Seguanda e quarta;1
+;Filosofia;60;2;Mara;2B;Informática para Internet;Sexta;Quinta;1
+;História;60;2;Paola;2B;Informática para Internet;quarta e quinta pela manhã;Segunda, Quinta e sexta;2
+;Banco de Dados;60;2;Sandra;2B;Informática para Internet;Sexta;Nenhuma noite;0
+;Inglês;60;2;Silvana;2B;Informática para Internet;Segunda;Nenhuma noite;0
+;Português;90;3;Silvana;2B;Informática para Internet;Segunda;Nenhuma noite;0
+;Artes;60;2;Tereza;2B;Informática para Internet;Segunda;Terça e Quarta;2
+;História;60;2;Anderson;2H;Hospedagem;Segunda;Terça a sexta;2
+;Projetos Aplicados ao Turismo, Hospitalidade e Lazer I;60;2;Carolina;2H;Hospedagem;Segunda;todas as noites;3
+;Recepção e Reservas;60;2;Carolina;2H;Hospedagem;Segunda;todas as noites;3
+;Biologia;60;2;Eliane;2H;Hospedagem;Terça;Segunda;1
+;Matemática;90;3;Emilly;2H;Hospedagem;Quinta;Segunda, terça e sexta;3
+;Alimentos e bebidas na hotelaria;60;2;Fabrício;2H;Hospedagem;Sexta;Segunda e Quinta;3
+;Lingua Inglesa;60;2;Gilnei;2H;Hospedagem;Terça;Segunda, terça e quinta;3
+;Física;60;2;Guilherme;2H;Hospedagem;professor 20h concentrar as aulas no menor numero de dias possível;Nenhuma noite;0
+;Educação Física;60;2;Hélder;2H;Hospedagem;Concentrar as aulas nos períodos da manhã e preferencialmente próximo ao meio dia;Quarta;2
+;Eventos em meios de hospedagem;60;2;Kênia;2H;Hospedagem;Sexta;Segunda e Terça;3
+;Geografia;60;2;Leila;2H;Hospedagem;Segunda;Terça e Quarta;2
+;Sociologia;60;2;Leocádio;2H;Hospedagem;Segunda;quarta;2
+;Filosofia;60;2;Mara;2H;Hospedagem;Sexta;Quinta;1
+;Lingua Espanhola;60;2;Silvana;2H;Hospedagem;Segunda;Nenhuma noite;0
+;Lingua Portuguesa;90;3;Silvana;2H;Hospedagem;Segunda;Nenhuma noite;0
+;Química;60;2;Tatiane;2H;Hospedagem;Terça;Quinta;2
+;Artes;60;2;Tereza;2H;Hospedagem;Segunda;Terça e Quarta;2
+;Empreendedorismo Digital;60;2;Alex;3A;Informática para Internet;Sexta;Segunda, Terça, Quarta;4
+;Redes de Computadores;60;2;André;3A;Informática para Internet;Sexta;Terça e quarta;2
+;Desenvolvimento para Dispositivos Móveis;120;4;Armando;3A;Informática para Internet;Segunda;Terça;0
+;Biologia;60;2;Eliane;3A;Informática para Internet;Terça;Segunda;1
+;Química;60;2;Éria;3A;Informática para Internet;Segunda;Nenhuma noite;0
+;Optativa I - Espanhol, Libras, Treinamento / Astronomia;60;2;Glíndia / Substituto / Hélder / Helmo;3A;Informática para Internet;;;0
+;Física;60;2;Helmo;3A;Informática para Internet;Sexta;Quarta e Sexta;1
+;Desenvolvimento Web III;120;4;Joédio;3A;Informática para Internet;Sexta;Nenhuma noite;0
+;Geografia;60;2;Josieli;3A;Informática para Internet;Sexta;Nenhuma noite;0
+;Sociologia;60;2;Leocádio;3A;Informática para Internet;Segunda;quarta;2
+;Metodologia Científica;45;1;Liliana;3A;Informática para Internet;Terça;quarta;1
+;Matemática;90;3;Lucas;3A;Informática para Internet;Terça;Seguanda e quarta;1
+;Filosofia;60;2;Mara;3A;Informática para Internet;Sexta;Quinta;1
+;História;60;2;Paola;3A;Informática para Internet;quarta e quinta pela manhã;Segunda, Quinta e sexta;2
+;Português;90;3;Rose;3A;Informática para Internet;Sexta;Terça;1
+;Empreendedorismo Digital;60;2;Alex;3B;Informática para Internet;Sexta;Segunda, Terça, Quarta;4
+;Redes de Computadores;60;2;André;3B;Informática para Internet;Sexta;Terça e quarta;2
+;Biologia;60;2;Eliane;3B;Informática para Internet;Terça;Segunda;1
+;Química;60;2;Éria;3B;Informática para Internet;Segunda;Nenhuma noite;0
+;Optativa I - Espanhol, Libras, Treinamento / Astronomia;60;2;Glíndia / Substituto / Hélder / Helmo;3B;Informática para Internet;;;0
+;Física;60;2;Helmo;3B;Informática para Internet;Sexta;Quarta e Sexta;1
+;Desenvolvimento Web III;120;4;Joédio;3B;Informática para Internet;Sexta;Nenhuma noite;0
+;Geografia;60;2;Josieli;3B;Informática para Internet;Sexta;Nenhuma noite;0
+;Sociologia;60;2;Leocádio;3B;Informática para Internet;Segunda;quarta;2
+;Desenvolvimento para Dispositivos Móveis;120;4;Liliana;3B;Informática para Internet;Terça;quarta;1
+;Metodologia Científica;45;1;Liliana;3B;Informática para Internet;Terça;quarta;1
+;Matemática;90;3;Lucas;3B;Informática para Internet;Terça;Seguanda e quarta;1
+;Filosofia;60;2;Mara;3B;Informática para Internet;Sexta;Quinta;1
+;História;60;2;Paola;3B;Informática para Internet;quarta e quinta pela manhã;Segunda, Quinta e sexta;2
+;Português;90;3;Rose;3B;Informática para Internet;Sexta;Terça;1
+;Empreendedorismo Digital;60;2;Alex;3C;Informática para Internet;Sexta;Segunda, Terça, Quarta;4
+;Redes de Computadores;60;2;André;3C;Informática para Internet;Sexta;Terça e quarta;2
+;Biologia;60;2;Eliane;3C;Informática para Internet;Terça;Segunda;1
+;Química;60;2;Éria;3C;Informática para Internet;Segunda;Nenhuma noite;0
+;Optativa I - Espanhol, Libras, Treinamento / Astronomia;60;2;Glíndia / Substituto / Hélder / Helmo;3C;Informática para Internet;;;0
+;Física;60;2;Helmo;3C;Informática para Internet;Sexta;Quarta e Sexta;1
+;Desenvolvimento Web III;120;4;Joédio;3C;Informática para Internet;Sexta;Nenhuma noite;0
+;Geografia;60;2;Josieli;3C;Informática para Internet;Sexta;Nenhuma noite;0
+;Sociologia;60;2;Leocádio;3C;Informática para Internet;Segunda;quarta;2
+;Desenvolvimento para Dispositivos Móveis;120;4;Liliana;3C;Informática para Internet;Terça;quarta;1
+;Metodologia Científica;45;1;Liliana;3C;Informática para Internet;Terça;quarta;1
+;Filosofia;60;2;Mara;3C;Informática para Internet;Sexta;Quinta;1
+;História;60;2;Paola;3C;Informática para Internet;quarta e quinta pela manhã;Segunda, Quinta e sexta;2
+;Português;90;3;Rose;3C;Informática para Internet;Sexta;Terça;1
+;Matemática;90;3;Valdirene;3C;Informática para Internet;Terça;Nenhuma noite;0
+;História;60;2;Anderson;3H;Hospedagem;Segunda;Terça a sexta;2
+;Técnicas de Vendas em Meios de Hospedagem;60;2;Carolina;3H;Hospedagem;Segunda;todas as noites;3
+;Biologia;60;2;Eliane;3H;Hospedagem;Terça;Segunda;1
+;Matemática;90;3;Emilly;3H;Hospedagem;Quinta;Segunda, terça e sexta;3
+;Sustentabilidade nos Meios de Hospedagem;60;2;Fabrício;3H;Hospedagem;Sexta;Segunda e Quinta;3
+;Lingua Espanhola;60;2;Glíndia;3H;Hospedagem;Sexta;Nenhuma noite;0
+;Física;60;2;Helmo;3H;Hospedagem;Sexta;Quarta e Sexta;1
+;Geografia;60;2;Josieli;3H;Hospedagem;Sexta;Nenhuma noite;0
+;Sociologia;60;2;Leocádio;3H;Hospedagem;Segunda;quarta;2
+;Governança;60;2;Maria Emília;3H;Hospedagem;Segunda;Quarta, quinta e sexta;3
+;Projetos Aplicados ao Turismo, Hospitalidade e Lazer II;60;2;Maria Emília;3H;Hospedagem;Segunda;Quarta, quinta e sexta;3
+;Lingua Portuguesa;90;3;Rose;3H;Hospedagem;Sexta;Terça;1
+;Optativa - Libras, Treinamento / Astronomia;60;2;Substituto / Hélder / Helmo;3H;Hospedagem;;;0
+;Química;60;2;Tatiane;3H;Hospedagem;Terça;Quinta;2
+;Artes;60;2;Tereza;3H;Hospedagem;Segunda;Terça e Quarta;2
+;;;;Ana Paula;;Cursos noturnos;Sexta;Segunda;
+;;;;André;;Cursos noturnos;Sexta;Terça e quarta;
+;;;;Angela;;Cursos noturnos;Sexta;segunda e terça;
+;;;;Carla Margarete;;Cursos noturnos;Terca;;
+;;;;Carla Sofia;;Cursos noturnos;Segunda;;
+;;;;Darc;;Cursos noturnos;Segunda;terça, quarta e sexta;
+;;;;Giovani;;Cursos noturnos;Terça;terça, quarta, quinta e sexta;
+;;;;Guilherme Klein;;Cursos noturnos;Terça;;
+;;;;Jardel;;Cursos noturnos;Segunda;Terça, quarta, quinta e sexta;
+;;;;Lucyene;;Cursos noturnos;Terça;Terça, Quarta, Quinta e Sexta;
+;;;;Marco Antonio;;Cursos noturnos;Sexta;Segunda, terça e quinta;
+;;;;Margarete;;Cursos noturnos;Terça;segunda e quinta;
+;;;;Matheus Braga;;Cursos noturnos;Sexta;Quarta e sexta;
+;LIBRAS;;;substituto de libras;;;;quarta e sexta;

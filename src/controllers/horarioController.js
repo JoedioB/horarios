@@ -6,14 +6,11 @@ const exceljs = require('exceljs');
 const puppeteer = require('puppeteer');
 const fs = require('fs').promises;
 const path = require('path');
+const { SLOTS, DIAS_SEMANA } = require('../config/constants');
 
-const SLOTS = [
-    { inicio: '08:00:00', fim: '08:45:00' }, { inicio: '08:45:00', fim: '09:30:00' },
-    { inicio: '09:45:00', fim: '10:30:00' }, { inicio: '10:30:00', fim: '11:15:00' }, { inicio: '11:15:00', fim: '12:00:00' },
-    { inicio: '13:00:00', fim: '13:45:00' }, { inicio: '13:45:00', fim: '14:30:00' }, { inicio: '14:30:00', fim: '15:15:00' },
-    { inicio: '15:30:00', fim: '16:15:00' }, { inicio: '16:15:00', fim: '17:00:00' },
-];
-const DIAS_SEMANA = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta'];
+// Semáforo simples para limitar concorrência do Puppeteer
+let activePdfGenerations = 0;
+const MAX_CONCURRENT_PDFS = 2;
 
 // -- Sua função `gerar` existente --
 exports.gerar = async (req, res) => {
@@ -32,8 +29,13 @@ exports.gerar = async (req, res) => {
 // ####################################################################
 exports.visualizarPorTurma = async (req, res) => {
     try {
-        const turmaId = req.params.id;
+        const turmaId = parseInt(req.params.id, 10);
+        if (isNaN(turmaId)) {
+            return res.status(400).send('ID de turma inválido');
+        }
+
         const turma = await Turma.findByPk(turmaId);
+
         if (!turma) {
             return res.status(404).send('Turma não encontrada');
         }
@@ -63,6 +65,65 @@ exports.visualizarPorTurma = async (req, res) => {
     } catch (error) {
         console.error("Erro ao visualizar horário:", error);
         res.status(500).send("Erro ao buscar horário da turma.");
+    }
+};
+
+/**
+ * Exporta o horário de uma turma para um arquivo Excel (.xlsx).
+ */
+exports.exportarParaExcel = async (req, res) => {
+    try {
+        const turmaId = parseInt(req.params.id, 10);
+        if (isNaN(turmaId)) return res.status(400).send('ID de turma inválido.');
+
+        const turma = await Turma.findByPk(turmaId);
+        if (!turma) return res.status(404).send('Turma não encontrada.');
+
+        const horarios = await Horario.findAll({
+            where: { turmaId },
+            include: [Disciplina, Professor],
+            order: [['dia_semana', 'ASC'], ['hora_inicio', 'ASC']]
+        });
+
+        const workbook = new exceljs.Workbook();
+        const worksheet = workbook.addWorksheet(`Horário - ${turma.nome}`);
+
+        // Cabeçalho
+        const header = ['Horário', ...DIAS_SEMANA];
+        worksheet.addRow(header);
+
+        // Estilo do Cabeçalho
+        worksheet.getRow(1).font = { bold: true };
+        worksheet.getRow(1).alignment = { horizontal: 'center' };
+
+        // Montagem das Linhas
+        const quadroHorario = {};
+        horarios.forEach(h => {
+            quadroHorario[`${h.dia_semana}-${h.hora_inicio}`] = `${h.Disciplina.nome}\n(${h.Professor.nome})`;
+        });
+
+        SLOTS.forEach(slot => {
+            const rowData = [`${slot.inicio.substring(0, 5)} - ${slot.fim.substring(0, 5)}`];
+            for (let dia = 1; dia <= 5; dia++) {
+                rowData.push(quadroHorario[`${dia}-${slot.inicio}`] || '-');
+            }
+            const row = worksheet.addRow(rowData);
+            row.alignment = { wrapText: true, horizontal: 'center', vertical: 'middle' };
+        });
+
+        worksheet.columns.forEach(column => {
+            column.width = 20;
+        });
+
+        res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        res.setHeader('Content-Disposition', `attachment; filename="horario_${turma.nome.replace(/\s/g, '_')}.xlsx"`);
+
+        await workbook.xlsx.write(res);
+        res.end();
+
+    } catch (error) {
+        console.error("Erro ao exportar para Excel:", error);
+        res.status(500).send("Erro ao gerar arquivo Excel.");
     }
 };
 
@@ -158,7 +219,16 @@ async function gerarHtmlParaPDF(turma, quadroHorario) {
 exports.exportarParaPDF = async (req, res) => {
     let browser = null;
     try {
-        const turmaId = req.params.id;
+        if (activePdfGenerations >= MAX_CONCURRENT_PDFS) {
+            return res.status(503).send('Servidor sobrecarregado gerando PDFs. Tente novamente em alguns instantes.');
+        }
+        activePdfGenerations++;
+
+        const turmaId = parseInt(req.params.id, 10);
+        if (isNaN(turmaId)) {
+            return res.status(400).send('ID de turma inválido.');
+        }
+
         const turma = await Turma.findByPk(turmaId);
         if (!turma) return res.status(404).send('Turma não encontrada.');
 
@@ -212,5 +282,7 @@ exports.exportarParaPDF = async (req, res) => {
         if (!res.headersSent) {
             res.status(500).send("Erro interno ao gerar o arquivo PDF. Verifique os logs do servidor.");
         }
+    } finally {
+        activePdfGenerations = Math.max(0, activePdfGenerations - 1);
     }
 };

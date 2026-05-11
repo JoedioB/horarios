@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: horarios_mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: horarios_db
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_USER: user_horarios
+      MYSQL_PASSWORD: user_password
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  app:
+    build: .
+    container_name: horarios_app
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - MYSQLHOST=db
+      - MYSQLPORT=3306
+      - MYSQLUSER=user_horarios
+      - MYSQLPASSWORD=user_password
+      - MYSQLDATABASE=horarios_db
+      - NODE_ENV=development
+    depends_on:
+      - db
+
+volumes:
+  mysql_data:
