@@ -2,18 +2,17 @@ version: '3.8'
 
 services:
   db:
-    image: mysql:8.0
-    container_name: horarios_mysql
+    image: postgres:15-alpine
+    container_name: horarios_postgres
     restart: always
     environment:
-      MYSQL_DATABASE: horarios_db
-      MYSQL_ROOT_PASSWORD: root_password
-      MYSQL_USER: user_horarios
-      MYSQL_PASSWORD: user_password
+      POSTGRES_DB: horarios_db
+      POSTGRES_USER: user_horarios
+      POSTGRES_PASSWORD: user_password
     ports:
-      - "3307:3306"
+      - "5432:5432"
     volumes:
-      - mysql_data:/var/lib/mysql
+      - postgres_data:/var/lib/postgresql/data
 
   app:
     build: .
@@ -23,7 +22,7 @@ services:
       - "3000:3000"
     environment:
       - MYSQLHOST=db
-      - MYSQLPORT=3306
+      - MYSQLPORT=5432
       - MYSQLUSER=user_horarios
       - MYSQLPASSWORD=user_password
       - MYSQLDATABASE=horarios_db
@@ -32,4 +31,4 @@ services:
       - db
 
 volumes:
-  mysql_data:
+  postgres_data:
