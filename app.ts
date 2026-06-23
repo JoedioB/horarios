@@ -32,7 +32,14 @@ if (process.env.NODE_ENV !== 'production') {
 
 // Middlewares de Segurança
 app.use(helmet({
-  contentSecurityPolicy: false,
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      imgSrc: ["'self'", "data:"],
+    },
+  },
 }));
 app.use(cors());
 

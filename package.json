@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node dist/app.js",
     "dev": "nodemon app.js",
-    "build": "tsc",
+    "build": "tsc && cp -r src/config dist/src/config && cp -r src/views dist/src/views",
     "test": "jest",
     "db:migrate": "sequelize db:migrate"
   },

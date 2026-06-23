@@ -1,0 +1,28 @@
+extends layout
+
+block content
+  .d-flex.justify-content-between.align-items-center.mb-4
+    h1= title
+    a.btn.btn-success(href="/disciplinas/novo") + Nova Disciplina
+
+  table.table.table-striped.table-hover
+    thead
+      tr
+        th ID
+        th Nome
+        th Carga Horária (Aulas/Semana)
+        th Ações
+    tbody
+      if disciplinas && disciplinas.length
+        each disc in disciplinas
+          tr
+            td= disc.id
+            td= disc.nome
+            td= disc.carga_horaria_semanal
+            td
+              a.btn.btn-sm.btn-primary.me-2(href=`/disciplinas/editar/${disc.id}`) Editar
+              form(action=`/disciplinas/deletar/${disc.id}`, method="POST", style="display:inline;" onsubmit="return confirm('Tem certeza?');")
+                button.btn.btn-sm.btn-danger(type="submit") Deletar
+      else
+        tr
+          td(colspan="4").text-center Nenhuma disciplina cadastrada.

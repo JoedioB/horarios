@@ -4,7 +4,7 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     const transaction = await queryInterface.sequelize.transaction();
     try {
-      await queryInterface.bulkInsert('Professores', [
+      await queryInterface.bulkInsert('Professors', [
         { nome: 'Prof. João', createdAt: new Date(), updatedAt: new Date() },
         { nome: 'Prof. Maria', createdAt: new Date(), updatedAt: new Date() }
       ], { transaction });
@@ -15,9 +15,10 @@ module.exports = {
       ], { transaction });
 
       await queryInterface.bulkInsert('Turmas', [
-        { nome: '1A', createdAt: new Date(), updatedAt: new Date() },
-        { nome: '2B', createdAt: new Date(), updatedAt: new Date() }
+        { nome: '1A', ano: '1º Ano', createdAt: new Date(), updatedAt: new Date() },
+        { nome: '2B', ano: '2º Ano', createdAt: new Date(), updatedAt: new Date() }
       ], { transaction });
+
 
       await transaction.commit();
     } catch (err) {
@@ -27,8 +28,8 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.bulkDelete('Turmas', null, {});
-    await queryInterface.bulkDelete('Disciplinas', null, {});
-    await queryInterface.bulkDelete('Professores', null, {});
+    await queryInterface.bulkDelete('Classes', null, {});
+    await queryInterface.bulkDelete('Disciplines', null, {});
+    await queryInterface.bulkDelete('Professors', null, {});
   }
 };

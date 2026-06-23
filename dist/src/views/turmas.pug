@@ -1,0 +1,29 @@
+extends layout
+
+block content
+  .d-flex.justify-content-between.align-items-center.mb-4
+    h1= title
+    a.btn.btn-success(href="/turmas/novo") + Nova Turma
+
+  table.table.table-striped.table-hover
+    thead
+      tr
+        th ID
+        th Nome
+        th Ano/Série
+        th Ações
+    tbody
+      if turmas && turmas.length
+        each turma in turmas
+          tr
+            td= turma.id
+            td= turma.nome
+            td= turma.ano
+            td
+              a.btn.btn-sm.btn-info.me-2(href=`/turmas/${turma.id}/disciplinas`) Disciplinas
+              a.btn.btn-sm.btn-primary.me-2(href=`/turmas/editar/${turma.id}`) Editar
+              form(action=`/turmas/deletar/${turma.id}`, method="POST", style="display:inline;" onsubmit="return confirm('Tem certeza?');")
+                button.btn.btn-sm.btn-danger(type="submit") Deletar
+      else
+        tr
+          td(colspan="4").text-center Nenhuma turma cadastrada.

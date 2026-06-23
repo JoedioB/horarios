@@ -65,7 +65,14 @@ if (process.env.NODE_ENV !== 'production') {
 }
 // Middlewares de Segurança
 app.use((0, helmet_1.default)({
-    contentSecurityPolicy: false,
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'self'"],
+            scriptSrc: ["'self'", "'unsafe-inline'"],
+            styleSrc: ["'self'", "'unsafe-inline'"],
+            imgSrc: ["'self'", "data:"],
+        },
+    },
 }));
 app.use((0, cors_1.default)());
 const limiter = (0, express_rate_limit_1.default)({

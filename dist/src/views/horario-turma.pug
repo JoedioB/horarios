@@ -1,0 +1,57 @@
+extends layout
+
+block content
+  h1.mb-4= title
+
+  //- A variável 'turmaId' agora é passada diretamente pelo controller
+  if turmaId
+    .d-flex.justify-content-end.mb-3.no-print
+      .btn-group
+        button.btn.btn-secondary(type="button" onclick="window.print()")
+          | Imprimir
+        a.btn.btn-success(href=`/horarios/turma/${turmaId}/exportar/excel`)
+          | Exportar para Excel
+        a.btn.btn-danger(href=`/horarios/turma/${turmaId}/exportar/pdf`)
+          | Exportar para PDF
+
+  .table-responsive
+    // ... (o resto da tabela permanece igual)
+  .table-responsive
+    table.table.table-bordered.text-center.align-middle
+      thead.table-dark
+        tr
+          th Horário
+          each dia in diasDaSemana
+            th= dia
+      tbody
+        - let slotIndex = 0
+        while slotIndex < slots.length
+          - const slot = slots[slotIndex]
+          tr
+            td
+              strong= `${slot.inicio.substring(0, 5)} - ${slot.fim.substring(0, 5)}`
+            - for (let dia = 1; dia <= 5; dia++)
+              td
+                - const key = `${dia}-${slot.inicio}`
+                - const aula = quadroHorario[key]
+                if aula
+                  div
+                    strong= aula.disciplina
+                    br
+                    small.text-muted= aula.professor
+                else
+                  span -
+          - slotIndex++
+          //- Adiciona os intervalos fixos
+          if (slotIndex === 2)
+            tr.table-intervals
+              td 09:30 - 09:45
+              td(colspan="5") INTERVALO
+          if (slotIndex === 5)
+            tr.table-intervals
+              td 12:00 - 13:00
+              td(colspan="5") ALMOÇO
+          if (slotIndex === 8)
+            tr.table-intervals
+              td 15:15 - 15:30
+              td(colspan="5") INTERVALO

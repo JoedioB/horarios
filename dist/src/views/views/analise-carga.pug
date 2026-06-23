@@ -1,0 +1,53 @@
+extends layout
+
+block content
+  h1= title
+  p.lead Esta página ajuda a diagnosticar por que o gerador de horários pode estar falhando. Procure por valores em vermelho ou amarelo.
+
+  .row.mt-4
+    .col-md-12
+      h3 Carga Horária por Turma
+      p
+        | Uma turma tem 
+        strong 40
+        |  slots de aula disponíveis por semana. Se a "Carga Total" se aproximar ou ultrapassar 40, a geração de horário se torna muito difícil ou impossível. Expanda uma turma para ver detalhes sobre os professores.
+      
+      .accordion#turmasAccordion
+        each turma, index in analiseTurmas
+          - const isSaturated = turma.saturacao > 90
+          .accordion-item(class=isSaturated ? 'border-danger' : '')
+            h2.accordion-header(id=`heading${index}`)
+              button.accordion-button.collapsed(type="button" data-bs-toggle="collapse" data-bs-target=`#collapse${index}`)
+                .d-flex.w-100.justify-content-between.align-items-center.pe-3
+                  strong= turma.nome
+                  span.badge(class=isSaturated ? 'bg-danger' : 'bg-info')= `Carga: ${turma.cargaTotal} aulas`
+                  .progress.w-50
+                    .progress-bar(role="progressbar", style=`width: ${turma.saturacao}%;`, class=isSaturated ? 'bg-danger' : 'bg-primary')= `${turma.saturacao}%`
+
+            .accordion-collapse.collapse(id=`collapse${index}` data-bs-parent="#turmasAccordion")
+              .accordion-body
+                h6 Professores por Disciplina:
+                ul.list-group.list-group-flush
+                  each disc in turma.disciplinas
+                    li.list-group-item(class=disc.professores.length === 0 ? 'list-group-item-warning' : '')
+                      strong #{disc.nome}: 
+                      if disc.professores.length > 0
+                        span.text-muted= disc.professores.join(', ')
+                      else
+                        strong.text-danger Nenhum professor qualificado!
+  
+  .row.mt-5
+    .col-md-12
+      h3 Disponibilidade de Professores
+      p
+        | A coluna "Disponibilidade" mostra quantos slots de 45 minutos o professor está disponível na semana. A "Carga Horária Total" (que será implementada) mostra quantas aulas ele precisa dar. Se a carga for maior que a disponibilidade, a geração falhará.
+      table.table.table-sm.table-bordered
+        thead.table-dark
+          tr
+            th Professor
+            th Disponibilidade (slots de 45min)
+        tbody
+          each prof in analiseProfessores
+            tr
+              td= prof.nome
+              td= prof.disponibilidade

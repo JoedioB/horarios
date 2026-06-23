@@ -1,0 +1,46 @@
+extends layout
+
+block content
+  .container.mt-5
+    h1= title
+    
+    table.table.table-bordered.text-center
+      thead
+        tr
+          th Horário
+          each dia in diasDaSemana
+            th= dia
+      tbody
+        each slot in slots
+          tr
+            td= `${slot.inicio} - ${slot.fim}`
+            - for (let dia = 1; dia <= 5; dia++)
+              td
+                - const aula = quadroHorario[`${dia}-${slot.inicio}:00`]
+                if aula
+                  div
+                    strong= aula.disciplina
+                    br
+                    small= aula.professor
+                else
+                  | -
+        // Adicionar linhas para os intervalos
+        tr.table-secondary
+          td 09:30 - 09:45
+          td(colspan="5") INTERVALO
+        tr.table-secondary
+          td 11:30 - 11:45
+          td(colspan="5") INTERVALO
+        tr.table-secondary
+          td 13:30 - 13:45
+          td(colspan="5") INTERVALO
+        tr.table-secondary
+          td 15:30 - 15:45
+          td(colspan="5") INTERVALO
+        tr.table-secondary
+          td 17:30 - 17:45
+          td(colspan="5") INTERVALO
+    .mt-4
+    a.btn.btn-primary(href="/") Voltar para o início
+    a.btn.btn-secondary(href="/horario/download") Baixar Horário em PDF
+    a.btn.btn-secondary(href="/horario/download/excel") Baixar Horário em Excel

@@ -15,7 +15,7 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "types": ["jest"]
+    "types": ["jest", "node"]
   },
   "include": ["**/*.ts"],
   "exclude": ["node_modules", "dist", "public"]

@@ -1,0 +1,21 @@
+extends layout
+
+block content
+  h1= title
+  p Marque as disciplinas que esta turma terá.
+
+  form(action=`/turmas/${turma.id}/disciplinas`, method="POST")
+    .mb-3
+      each disciplina in todasDisciplinas
+        .form-check
+          input.form-check-input(
+            type="checkbox", 
+            name="disciplinas", 
+            value=disciplina.id, 
+            id=`disciplina-${disciplina.id}`,
+            checked=idsDisciplinasDaTurma.includes(disciplina.id)
+          )
+          label.form-check-label(for=`disciplina-${disciplina.id}`)= `${disciplina.nome} (${disciplina.carga_horaria_semanal} aulas/sem)`
+    
+    button.btn.btn-primary(type="submit") Salvar Associações
+    a.btn.btn-secondary.ms-2(href="/turmas") Voltar

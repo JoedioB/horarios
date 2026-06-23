@@ -1,0 +1,32 @@
+extends layout
+
+block content
+  h1= title
+
+  form(action="/grupos-geminados/novo", method="POST")
+    .mb-3
+      label.form-label(for="nome") Nome do Grupo
+      input.form-control#nome(type="text", name="nome", required, placeholder="Ex: Educação Física - 6º Anos")
+    
+    .row
+      .col-md-6.mb-3
+        label.form-label(for="disciplinaId") Disciplina
+        select.form-select#disciplinaId(name="disciplinaId", required)
+          each disciplina in disciplinas
+            option(value=disciplina.id)= disciplina.nome
+      .col-md-6.mb-3
+        label.form-label(for="professorId") Professor
+        select.form-select#professorId(name="professorId", required)
+          each professor in professores
+            option(value=professor.id)= professor.nome
+    
+    .mb-3
+      label.form-label Turmas Participantes
+      .border.p-3.rounded(style="max-height: 200px; overflow-y: auto;")
+        each turma in turmas
+          .form-check
+            input.form-check-input(type="checkbox", name="turmasIds", value=turma.id, id=`turma-${turma.id}`)
+            label.form-check-label(for=`turma-${turma.id}`)= turma.nome
+
+    button.btn.btn-primary(type="submit") Salvar Grupo
+    a.btn.btn-secondary.ms-2(href="/grupos-geminados") Cancelar

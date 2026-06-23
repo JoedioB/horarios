@@ -1,0 +1,15 @@
+extends layout
+
+block content
+  h1= title
+  
+  form(action=(turma.id ? `/turmas/editar/${turma.id}` : '/turmas/novo'), method="POST")
+    .mb-3
+      label.form-label(for="nome") Nome da Turma
+      input.form-control#nome(type="text", name="nome", value=turma.nome || '', required, placeholder="Ex: 601")
+    .mb-3
+      label.form-label(for="ano") Ano/Série
+      input.form-control#ano(type="text", name="ano", value=turma.ano || '', required, placeholder="Ex: 6º Ano")
+    
+    button.btn.btn-primary(type="submit") Salvar
+    a.btn.btn-secondary.ms-2(href="/turmas") Cancelar

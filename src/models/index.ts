@@ -1,7 +1,7 @@
 import { Sequelize } from 'sequelize';
 import * as process from 'process';
 const env = process.env.NODE_ENV || 'development';
-const config = require(__dirname + '/../config/database.js')[env];
+const config = require('../config/database')[env];
 
 import initProfessor from './professor';
 import initDisciplina from './disciplina';

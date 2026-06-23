@@ -1,0 +1,40 @@
+extends layout
+
+block content
+  h1= `Disponibilidade de ${professor.nome}`
+
+  h3.mt-4 Horários Cadastrados
+  if professor.disponibilidades && professor.disponibilidades.length
+    ul.list-group
+      each disp in professor.disponibilidades
+        li.list-group-item.d-flex.justify-content-between.align-items-center
+          div
+            strong #{dias[disp.dia_semana]}: 
+            | #{disp.hora_inicio.substring(0, 5)} às #{disp.hora_fim.substring(0, 5)}
+          form(action=`/professores/disponibilidade/deletar/${disp.id}`, method="POST")
+            button.btn.btn-sm.btn-danger(type="submit") X
+  else
+    p.text-muted Nenhuma disponibilidade cadastrada.
+
+  hr
+
+  h3.mt-4 Adicionar Novo Horário
+  form(action=`/professores/${professor.id}/disponibilidade`, method="POST")
+    .row.g-3
+      .col-md-4
+        label.form-label(for="dia_semana") Dia da Semana
+        select.form-select#dia_semana(name="dia_semana", required)
+          option(value="1") Segunda-feira
+          option(value="2") Terça-feira
+          option(value="3") Quarta-feira
+          option(value="4") Quinta-feira
+          option(value="5") Sexta-feira
+      .col-md-3
+        label.form-label(for="hora_inicio") Hora de Início
+        input.form-control#hora_inicio(type="time", name="hora_inicio", required)
+      .col-md-3
+        label.form-label(for="hora_fim") Hora de Fim
+        input.form-control#hora_fim(type="time", name="hora_fim", required)
+      .col-md-2.d-flex.align-items-end
+        button.btn.btn-success(type="submit") Adicionar
+    .form-text Exemplo de disponibilidade: Segunda, das 08:00 às 10:15.

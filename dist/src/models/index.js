@@ -41,7 +41,7 @@ const sequelize_1 = require("sequelize");
 Object.defineProperty(exports, "Sequelize", { enumerable: true, get: function () { return sequelize_1.Sequelize; } });
 const process = __importStar(require("process"));
 const env = process.env.NODE_ENV || 'development';
-const config = require(__dirname + '/../config/database.js')[env];
+const config = require('../config/database')[env];
 const professor_1 = __importDefault(require("./professor"));
 const disciplina_1 = __importDefault(require("./disciplina"));
 const turma_1 = __importDefault(require("./turma"));
